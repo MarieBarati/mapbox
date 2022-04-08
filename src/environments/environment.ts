@@ -2,8 +2,12 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const newLocal = 'pk.eyJ1IjoibWFyaWViYXJhdGkiLCJhIjoiY2wxb2lpM3h2MHh5ZDNmdGN2dDh6MzNvdSJ9.8Y3ktSVi1_KmjXUDFsoQSw';
 export const environment = {
-  production: false
+  production: false,
+  mapbox: {
+    accessToken: newLocal
+  }
 };
 
 /*

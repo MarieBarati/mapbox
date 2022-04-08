@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'mapbox'`, () => {
+  it(`should have as title 'mymap'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('mapbox');
+    expect(app.title).toEqual('mymap');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('mapbox app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('mymap app is running!');
   });
 });
