@@ -1,6 +1,6 @@
 import {Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
-import { AnySourceData, Map as MapboxMap} from 'mapbox-gl';
+import{Map as MapboxMap} from 'mapbox-gl';
 import { DataService } from 'src/app/services/data.service';
 import { environment } from 'src/environments/environment';
 
@@ -14,8 +14,8 @@ import { environment } from 'src/environments/environment';
 export class MapComponent implements OnInit {
   @ViewChild('map', { static: true }) mapElement!: ElementRef;
   public map!: MapboxMap;
-  public polygonDataSource!: AnySourceData;
-  public pointDataSource!: AnySourceData;
+  public layer!: mapboxgl.AnyLayer;
+  public dataSource!: mapboxgl.AnySourceData;
   style = 'mapbox://styles/mapbox/light-v10';
   lat = 37.75;
   lng = -122.41;
@@ -23,7 +23,8 @@ export class MapComponent implements OnInit {
   constructor(private dataservice : DataService) { }
 
 
-  ngOnInit() {
+  ngOnInit(): void {
+    
         this.map = new mapboxgl.Map({
         accessToken : environment.mapbox.accessToken,
         container: this.mapElement.nativeElement,
@@ -31,15 +32,18 @@ export class MapComponent implements OnInit {
         zoom: 5, // starting zoom
         center: [-67.13734, 45.13745],
        });
-
-        this.getPolygonLayer();
-        this.getPointLayer();
-        this.getMarkerInfo();
-        this.getLayer();
+      this.getMarkerInfo();
+      this.getLayer();
 }
+
   getLayer() {
-    throw new Error('Method not implemented.');
-  }
+    this.dataSource = this.dataservice.data ;
+    this.layer = this.dataservice.layer ;
+    this.map.on('load', () => {
+      this.map.addSource('points', this.dataSource  );
+      this.map.addLayer( this.layer );
+  });
+}
 
   getMarkerInfo(): void {
     const marker = new mapboxgl.Marker({
@@ -49,55 +53,5 @@ export class MapComponent implements OnInit {
       .addTo(this.map);
   }
 
-  getPointLayer(): void {
-    this.pointDataSource = this.dataservice.getPointData();
-    this.map.on('load', () => {
-       this.map.addSource('points', this.pointDataSource );
-
-       this.map.addLayer({
-      id: 'circle',
-      type: 'circle',
-      source: 'points',
-      paint: {
-        'circle-stroke-color': '#000',
-        'circle-stroke-width': 1,
-        'circle-color': 'red',
-        'circle-radius': 5
-        }
-      });
-      },
-      );
-  }
-
-  getPolygonLayer(): void {
-    this.polygonDataSource =  this.dataservice.getPolygonData();
-    this.map.on('load', () => {
-
-      this.map.addSource('polygon', this.polygonDataSource);
-
-
-      this.map.addLayer({
-      id: 'polygon',
-      type: 'fill',
-      source: 'polygon',
-      layout: {},
-      paint: {
-      'fill-color': '#0080ff',
-      'fill-opacity': 0.5
-      }
-      });
-
-      this.map.addLayer({
-      id: 'outline',
-      type: 'line',
-      source: 'polygon',
-      layout: {},
-      paint: {
-      'line-color': '#000',
-      'line-width': 3
-      }
-    });
-    });
-  }
-
 }
+
