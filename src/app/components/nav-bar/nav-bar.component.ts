@@ -15,7 +15,6 @@ export class NavBarComponent implements OnInit {
 
   setLayer(name: string): void {
     this.dataService.setLayer(name);
-    console.log(name);
   }
 
 }

@@ -2,7 +2,7 @@ import * as mapboxgl from 'mapbox-gl';
 
 export default class Utils {
   static  point: number[] = [-77.03238901390978, 38.913188059745586 ];
-  static  polygon: any =  [
+  static  polygon: any = [[
                   [-67.13734, 45.13745],
                   [-66.96466, 44.8097],
                   [-68.03252, 44.3252],
@@ -23,15 +23,15 @@ export default class Utils {
                   [-67.79035, 47.06624],
                   [-67.79141, 45.70258],
                   [-67.13734, 45.13745]
-                ];
+                ]];
     static pointPaint: any = {
     'circle-stroke-color': '#000',
-    'circle-stroke-width': 1,
-    'circle-color': 'red',
+    'circle-stroke-width': 3,
+    'circle-color': 'pink',
     'circle-radius': 5
    };
   static polygonPaint: any = {
-  'fill-color': '#0080ff',
+  'fill-color': 'pink',
   'fill-opacity': 0.5
  };
 }
