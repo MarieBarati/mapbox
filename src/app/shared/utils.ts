@@ -27,8 +27,19 @@ export default class Utils {
     static pointPaint: any = {
     'circle-stroke-color': '#000',
     'circle-stroke-width': 3,
-    'circle-color': 'pink',
-    'circle-radius': 5
+    //'circle-color': 'pink',
+    'circle-radius': {
+      'base': 2,
+      'stops': [
+      [0, 14],
+      [20, 14],
+      ]
+      },
+    'circle-color': ['case',
+            ['boolean', ['feature-state', 'hover'], false],
+              '#b30059',
+              'pink'
+            ],
    };
   static polygonPaint: any = {
   'fill-color': 'pink',

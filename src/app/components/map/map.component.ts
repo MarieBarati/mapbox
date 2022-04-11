@@ -15,7 +15,7 @@ export class MapComponent implements OnInit {
   @ViewChild('map', { static: true }) mapElement!: ElementRef;
   public map!: MapboxMap;
   public layer!: mapboxgl.AnyLayer;
-  public dataSource!: mapboxgl.AnySourceData;
+   dataSource!:  {id : string , data : mapboxgl.AnySourceData};
   style = 'mapbox://styles/mapbox/light-v10';
   lat = 37.75;
   lng = -122.41;
@@ -34,30 +34,32 @@ export class MapComponent implements OnInit {
        });
       
       this.getMarkerInfo();
-      this.getLayer();
-      
+      this.getLayer();    
 }
 
-  getLayer() {
 
-    this.map.on('load',()=>{
- this.dataservice.dataEmiter.subscribe((res: AnySourceData)=> {
+  getLayer() {
+ this.dataservice.dataEmiter.subscribe((res)=> {
         this.dataSource = res;
-       if(!this.map.isSourceLoaded(this.dataservice.dataSourceId)) 
-        this.map.addSource(this.dataservice.dataSourceId, this.dataSource as AnySourceData );
-        console.log(this.dataservice.dataSourceId);
+        if(this.map.getSource(this.dataSource.id) == undefined)
+        this.map.addSource(this.dataSource.id, this.dataSource.data as AnySourceData );
       });
    
       this.dataservice.layerEmiter.subscribe((res: AnyLayer) => {
         this.layer = res;
-        if(this.map.getLayer(this.dataservice.dataSourceId)==undefined)
+        if(this.map.getLayer(this.dataSource.id) == undefined)
         this.map.addLayer(this.layer );
-        console.log(this.layer);
-      }); 
-    });
-     
+      });  
+
+      this.map.on('mousemove', 'point', () => {
+        this.map.setFeatureState({source: 'point', id: 1}, { hover: true});
+        });
+ 
+        this.map.on("mouseleave", 'point', () => {
+          this.map.setFeatureState({source: 'point', id: 1}, { hover: false});
+        });
       
-     
+         
 }
 
   getMarkerInfo(): void {
